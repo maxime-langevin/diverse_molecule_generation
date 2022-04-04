@@ -1,0 +1,6 @@
+__pycache__/*
+.ipynb_checkpoints/*
+data/*
+datasets/11*
+results/11*
+
