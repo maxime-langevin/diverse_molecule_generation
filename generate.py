@@ -19,7 +19,7 @@ def generate(dataset,
              n_estimators,
              seed,
              optimizer,
-             base_results, qsar_features, ad, ad_features, multiple_ads):
+             base_results, qsar_features, ad, ad_features, multiple_ads, beta, threshold):
     """
     Args:
         - dataset: which dataset to use
@@ -53,6 +53,7 @@ def generate(dataset,
     df = pd.read_csv(assay_file)
    
     df['features'] = qsar_features(df.smiles)
+    df['label'] = df['value'] > 8
     df_train, df_test = train_test_split(df, test_size=0.25, stratify=df['label'], random_state=0)
     X1 = np.array(list(df_train['features']))
     X2 = np.array(list(df_test['features']))
@@ -75,7 +76,7 @@ def generate(dataset,
     
 
     smiles_history = optimizer.generate_optimized_molecules(
-            scoring_function, 100, starting_population=df_test.smiles, get_history=True)
+            scoring_function, 100, starting_population=df_test.smiles, get_history=True, beta=beta, threshold=threshold)
     
     smiles_history = [[Chem.MolToSmiles(Chem.MolFromSmiles(s)) for s in smiles if Chem.MolFromSmiles(s) is not None] for smiles in smiles_history]
 
