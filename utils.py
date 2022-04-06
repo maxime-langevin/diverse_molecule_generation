@@ -350,10 +350,9 @@ def data_split(dataset):
         df2: data in split 2
     """
     # read data and calculate ecfp fingerprints
-    assay_file = f'datasets/{dataset}.csv'
-    print(f'Reading data from: {assay_file}')
-    df = pd.read_csv(assay_file)
-          
+
+    df = pd.read_csv(dataset)
+    df['label'] = df['value']>8 
     df['ecfp'] = ecfp4(df.smiles)
     df_train, df_test = train_test_split(df, test_size=0.25, stratify=df['label'], random_state=0)
     X1 = np.array(list(df_train['ecfp']))

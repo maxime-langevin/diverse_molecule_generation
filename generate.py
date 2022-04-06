@@ -43,9 +43,9 @@ def generate(dataset,
             ad_names += ad[i](["CCC"], ad_features[i]).name
             ad_names += '_'
             ad_names += str(ad_features[i].__name__)
-        results_dir = os.path.join(base_results, "lstm_hc", dataset, str(qsar_features.__name__) + ad_names, strftime("%Y-%m-%d_%H:%M:%S", gmtime()))
+        results_dir = os.path.join(base_results, "lstm_hc", dataset, str(qsar_features.__name__) + ad_names + '_beta_ ' + str(beta) + '_threshold_' + str(threshold), strftime("%Y-%m-%d_%H:%M:%S", gmtime()))
     else:
-        results_dir = os.path.join(base_results, "lstm_hc", dataset, str(qsar_features.__name__) + '_' + ad(["CCC"], ad_features).name  + '_' + str(ad_features.__name__), strftime("%Y-%m-%d_%H:%M:%S", gmtime()))
+        results_dir = os.path.join(base_results, "lstm_hc", dataset, str(qsar_features.__name__) + '_' + ad(["CCC"], ad_features).name  + '_' + str(ad_features.__name__) + '_beta_ ' + str(beta) + '_threshold_' + str(threshold), strftime("%Y-%m-%d_%H:%M:%S", gmtime()))
     
     os.makedirs(results_dir, exist_ok=True)
     
