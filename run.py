@@ -36,6 +36,7 @@ if __name__ == '__main__':
     parser.add_argument("--base_results", help='Where to store the results', default="results")
     parser.add_argument("--dataset", help='Where to store the results', default="CHEMBL3888429_cleaned")
     parser.add_argument("--n_estimators", type=int, help='Number of trees for the random forest', default=100)
+    parser.add_argument("--threshold", type=float, help='Threshold to use in the similarity penalty', default=0.7)
     args = parser.parse_args()
     
     optimizer_args = opt_args['lstm_hc']
@@ -43,10 +44,9 @@ if __name__ == '__main__':
     for qsar_features in [ecfp4]:
         for ad in [[in_range, in_range]]:
             for ad_features in [[physchem, ecfp4_counts]]:
-                for beta in [1, 3, 5, 10, 100, 1000]:
-                    threshold = 0.7
+                for beta in [0, 1, 10, 100, 1000]:
                     for i in range(0, args.nruns):
                         seed = i 
                         optimizer = SmilesRnnDirectedGenerator(**optimizer_args)
                         generate(args.dataset, args.n_estimators, seed, optimizer, 
-                                args.base_results, qsar_features, ad, ad_features, True, beta, threshold)
+                                args.base_results, qsar_features, ad, ad_features, True, beta, args.threshold)
