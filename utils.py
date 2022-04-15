@@ -17,7 +17,7 @@ import numpy as np
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-import umap
+#import umap
 from rdkit import DataStructs
 from rdkit.ML.Cluster import Butina
 from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
