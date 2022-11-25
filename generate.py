@@ -53,7 +53,7 @@ def generate(dataset,
     df = pd.read_csv(assay_file)
    
     df['features'] = qsar_features(df.smiles)
-    df['label'] = df['value'] > 8
+    df['label'] = df['value'] > 7.5
     df_train, df_test = train_test_split(df, test_size=0.25, stratify=df['label'], random_state=0)
     X1 = np.array(list(df_train['features']))
     X2 = np.array(list(df_test['features']))

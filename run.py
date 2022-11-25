@@ -40,7 +40,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     optimizer_args = opt_args['lstm_hc']
-    
     for qsar_features in [ecfp4]:
         for ad in [[in_range, in_range]]:
             for ad_features in [[physchem, ecfp4_counts]]:

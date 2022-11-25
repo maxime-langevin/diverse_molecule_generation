@@ -3,4 +3,5 @@ __pycache__/*
 data/*
 datasets/11*
 results/11*
-
+images/*
+jak2_enriched/*
