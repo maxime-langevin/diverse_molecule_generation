@@ -163,26 +163,20 @@ class levenshtein(AD):
 
 
 class in_range(AD):
-    def __init__(self, reference_molecules, featurization, tolerance=0):
+    def __init__(
+        self,
+        reference_molecules,
+        featurization,
+        tolerance=0,
+        lower_percentile=0.1,
+        upper_percentile=99.9,
+    ):
         super().__init__(reference_molecules, featurization)
         self.table = self.featurization(self.ref)
-        self.mins = []
-        self.maxs = []
-        
-        for i in range(len(np.array(self.table[0]))):
-            minimum = 1000
-            maximum = -1000
-           
-            for element in self.table:
-               
-                if element[i]>maximum:
-                    maximum = np.array(element)[i]
-                if element[i]<minimum:
-                    minimum = np.array(element)[i]
-               
-            self.mins.append(minimum)
-            self.maxs.append(maximum)
-           
+
+        self.lower = np.percentile(np.array(self.table), lower_percentile, axis=0)
+        self.upper = np.percentile(np.array(self.table), upper_percentile, axis=0)
+
         self.tolerance = tolerance
         self.name = "range"
 
@@ -193,13 +187,12 @@ class in_range(AD):
             try:
                 if Chem.MolFromSmiles(smiles):
                     X = np.array(self.featurization([smiles])[0])
-               
+
                     for i in range(len(X)):
-                    
-                        if X[i]>self.maxs[i] or X[i]<self.mins[i]:
+                        if X[i] > self.upper[i] or X[i] < self.lower[i]:
                             valid = False
-                
-                    is_in_AD.append(1*valid)
+
+                    is_in_AD.append(1 * valid)
                 else:
                     is_in_AD.append(0)
 
