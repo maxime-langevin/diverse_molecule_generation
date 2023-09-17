@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument("--nruns", type = int, help='How many runs to perform per task', default=10)
     parser.add_argument("--base_results", help='Where to store the results', default="results")
-    parser.add_argument("--dataset", help='Where to store the results', default="CHEMBL3888429_cleaned")
+    parser.add_argument("--dataset", help='Name of the dataset', default="CHEMBL3888429")
     parser.add_argument("--n_estimators", type=int, help='Number of trees for the random forest', default=100)
     parser.add_argument("--threshold", type=float, help='Threshold to use in the similarity penalty', default=0.7)
     args = parser.parse_args()

@@ -74,9 +74,8 @@ def generate(dataset,
     # run optimization
     t0 = time()
     
-
     smiles_history = optimizer.generate_optimized_molecules(
-            scoring_function, 100, starting_population=df_test.smiles, get_history=True, beta=beta, threshold=threshold)
+            scoring_function, 100, starting_population=df_train.smiles, get_history=True, beta=beta, threshold=threshold)
     
     smiles_history = [[Chem.MolToSmiles(Chem.MolFromSmiles(s)) for s in smiles if Chem.MolFromSmiles(s) is not None] for smiles in smiles_history]
 
