@@ -1,6 +1,6 @@
 ```bash
 git clone https://github.com/maxime-langevin/diverse_molecule_generation.git
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
 conda create -c conda-forge -n diverse_molgen rdkit
 conda activate diverse_molgen
 pip install -r requirements.txt
