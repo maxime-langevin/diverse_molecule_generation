@@ -37,6 +37,7 @@ if __name__ == '__main__':
     parser.add_argument("--dataset", help='Name of the dataset', default="CHEMBL3888429")
     parser.add_argument("--n_estimators", type=int, help='Number of trees for the random forest', default=100)
     parser.add_argument("--threshold", type=float, help='Threshold to use in the similarity penalty', default=0.7)
+    parser.add_argument("--use_memory_rl", default=False, action='store_true')
     args = parser.parse_args()
     
     optimizer_args = opt_args['lstm_hc']
@@ -48,4 +49,4 @@ if __name__ == '__main__':
                         seed = i 
                         optimizer = SmilesRnnDirectedGenerator(**optimizer_args)
                         generate(args.dataset, args.n_estimators, seed, optimizer, 
-                                args.base_results, qsar_features, ad, ad_features, True, beta, args.threshold)
+                                args.base_results, qsar_features, ad, ad_features, True, beta, args.threshold, args.use_memory_rl)

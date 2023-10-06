@@ -19,7 +19,7 @@ def generate(dataset,
              n_estimators,
              seed,
              optimizer,
-             base_results, qsar_features, ad, ad_features, multiple_ads, beta, threshold):
+             base_results, qsar_features, ad, ad_features, multiple_ads, beta, threshold, use_memory_rl):
     """
     Args:
         - dataset: which dataset to use
@@ -49,11 +49,12 @@ def generate(dataset,
     
     os.makedirs(results_dir, exist_ok=True)
     
-    assay_file = f'./datasets/{dataset}.csv'
+    assay_file = './datasets/' + dataset + '.csv'
     df = pd.read_csv(assay_file)
    
     df['features'] = qsar_features(df.smiles)
-    df['label'] = df['value'] > 7.5
+    if not 'label' in df.columns:
+        df['label'] = df['value'] > 7.5
     df_train, df_test = train_test_split(df, test_size=0.25, stratify=df['label'], random_state=0)
     X1 = np.array(list(df_train['features']))
     X2 = np.array(list(df_test['features']))
@@ -75,7 +76,7 @@ def generate(dataset,
     t0 = time()
     
     smiles_history = optimizer.generate_optimized_molecules(
-            scoring_function, 100, starting_population=df_train.smiles, get_history=True, beta=beta, threshold=threshold)
+            scoring_function, 100, starting_population=df_train.smiles, get_history=True, beta=beta, threshold=threshold,use_memory_rl=use_memory_rl)
     
     smiles_history = [[Chem.MolToSmiles(Chem.MolFromSmiles(s)) for s in smiles if Chem.MolFromSmiles(s) is not None] for smiles in smiles_history]
 
@@ -100,9 +101,9 @@ def generate(dataset,
     with open(results_file, 'w') as f:
         json.dump(results, f)
         
-    print(f'Storing results in {results_dir}')
-    print(f'Optimization time {opt_time:.2f}')
-    print(f'Statistics time {stat_time:.2f}')
+    print('Storing results in ' + results_dir)
+    print('Optimization time ' + opt_time)
+    print('Statistics time ' + stat_time)
 
 
 
