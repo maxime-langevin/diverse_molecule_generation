@@ -13,13 +13,23 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 from scoring_functions import ADScoringFunction, score
-from rdkit import Chem 
+from rdkit import Chem
 
-def generate(dataset,
-             n_estimators,
-             seed,
-             optimizer,
-             base_results, qsar_features, ad, ad_features, multiple_ads, beta, threshold, use_memory_rl):
+
+def generate(
+    dataset,
+    n_estimators,
+    seed,
+    optimizer,
+    base_results,
+    qsar_features,
+    ad,
+    ad_features,
+    multiple_ads,
+    beta,
+    threshold,
+    use_memory_rl,
+):
     """
     Args:
         - dataset: which dataset to use
@@ -35,50 +45,91 @@ def generate(dataset,
     np.random.seed(seed)
     torch.manual_seed(seed)
 
-  
     if multiple_ads:
         ad_names = ""
         for i, app in enumerate(ad):
-            ad_names += '_'
+            ad_names += "_"
             ad_names += ad[i](["CCC"], ad_features[i]).name
-            ad_names += '_'
+            ad_names += "_"
             ad_names += str(ad_features[i].__name__)
-        results_dir = os.path.join(base_results, "lstm_hc", dataset, str(qsar_features.__name__) + ad_names + '_beta_ ' + str(beta) + '_threshold_' + str(threshold), strftime("%Y-%m-%d_%H:%M:%S", gmtime()))
+        results_dir = os.path.join(
+            base_results,
+            "lstm_hc",
+            dataset,
+            str(qsar_features.__name__)
+            + ad_names
+            + "_beta_ "
+            + str(beta)
+            + "_threshold_"
+            + str(threshold),
+            strftime("%Y-%m-%d_%H:%M:%S", gmtime()),
+        )
     else:
-        results_dir = os.path.join(base_results, "lstm_hc", dataset, str(qsar_features.__name__) + '_' + ad(["CCC"], ad_features).name  + '_' + str(ad_features.__name__) + '_beta_ ' + str(beta) + '_threshold_' + str(threshold), strftime("%Y-%m-%d_%H:%M:%S", gmtime()))
-    
-    os.makedirs(results_dir, exist_ok=True)
-    
-    assay_file = './datasets/' + dataset + '.csv'
-    df = pd.read_csv(assay_file)
-   
-    df['features'] = qsar_features(df.smiles)
-    if not 'label' in df.columns:
-        df['label'] = df['value'] > 7.5
-    df_train, df_test = train_test_split(df, test_size=0.25, stratify=df['label'], random_state=0)
-    X1 = np.array(list(df_train['features']))
-    X2 = np.array(list(df_test['features']))
-    y1 = np.array(list(df_train['label']))
-    y2 = np.array(list(df_test['label']))
+        results_dir = os.path.join(
+            base_results,
+            "lstm_hc",
+            dataset,
+            str(qsar_features.__name__)
+            + "_"
+            + ad(["CCC"], ad_features).name
+            + "_"
+            + str(ad_features.__name__)
+            + "_beta_ "
+            + str(beta)
+            + "_threshold_"
+            + str(threshold),
+            strftime("%Y-%m-%d_%H:%M:%S", gmtime()),
+        )
 
+    os.makedirs(results_dir, exist_ok=True)
+
+    assay_file = "./datasets/" + dataset + ".csv"
+    df = pd.read_csv(assay_file)
+
+    df["features"] = qsar_features(df.smiles)
+    if not "label" in df.columns:
+        df["label"] = df["value"] > 7.5
+    df_train, df_test = train_test_split(
+        df, test_size=0.25, stratify=df["label"], random_state=0
+    )
+    X1 = np.array(list(df_train["features"]))
+    X2 = np.array(list(df_test["features"]))
+    y1 = np.array(list(df_train["label"]))
+    y2 = np.array(list(df_test["label"]))
 
     # train classifier used for the reward function
     clf = RandomForestClassifier(n_estimators=n_estimators, n_jobs=1, random_state=0)
     clf.fit(X1, y1)
-    
-    results = {}
-    df_train.to_csv(os.path.join(results_dir, 'train.csv'), index=False)
-    df_test.to_csv(os.path.join(results_dir, 'test.csv'), index=False)
 
-    scoring_function = ADScoringFunction(clf, qsar_features, ad, ad_features, df_test.smiles, multiple_ads)
+    results = {}
+    df_train.to_csv(os.path.join(results_dir, "train.csv"), index=False)
+    df_test.to_csv(os.path.join(results_dir, "test.csv"), index=False)
+
+    scoring_function = ADScoringFunction(
+        clf, qsar_features, ad, ad_features, df_test.smiles, multiple_ads
+    )
 
     # run optimization
     t0 = time()
-    
+
     smiles_history = optimizer.generate_optimized_molecules(
-            scoring_function, 100, starting_population=df_train.smiles, get_history=True, beta=beta, threshold=threshold,use_memory_rl=use_memory_rl)
-    
-    smiles_history = [[Chem.MolToSmiles(Chem.MolFromSmiles(s)) for s in smiles if Chem.MolFromSmiles(s) is not None] for smiles in smiles_history]
+        scoring_function,
+        100,
+        starting_population=df_train.smiles,
+        get_history=True,
+        beta=beta,
+        threshold=threshold,
+        use_memory_rl=use_memory_rl,
+    )
+
+    smiles_history = [
+        [
+            Chem.MolToSmiles(Chem.MolFromSmiles(s))
+            for s in smiles
+            if Chem.MolFromSmiles(s) is not None
+        ]
+        for smiles in smiles_history
+    ]
 
     t1 = time()
     opt_time = t1 - t0
@@ -88,27 +139,25 @@ def generate(dataset,
     statistics = []
     for optimized_smiles in smiles_history:
         row = {}
-        row['smiles'] = optimized_smiles
-        row['preds'] = {}
-        preds = score(optimized_smiles, clf, scoring_function.featurization, scoring_function.ad, multiple_ads)
-        row['preds']['scores'] = preds
+        row["smiles"] = optimized_smiles
+        row["preds"] = {}
+        preds = score(
+            optimized_smiles,
+            clf,
+            scoring_function.featurization,
+            scoring_function.ad,
+            multiple_ads,
+        )
+        row["preds"]["scores"] = preds
         statistics.append(row)
 
-    results['statistics'] = statistics
+    results["statistics"] = statistics
 
     stat_time = time() - t1
-    results_file = os.path.join(results_dir, 'results.json')
-    with open(results_file, 'w') as f:
+    results_file = os.path.join(results_dir, "results.json")
+    with open(results_file, "w") as f:
         json.dump(results, f)
-        
-    print('Storing results in ' + results_dir)
-    print('Optimization time ' + opt_time)
-    print('Statistics time ' + stat_time)
 
-
-
-
-
-
-
-
+    print("Storing results in " + results_dir)
+    print(f"Optimization time {opt_time}")
+    print(f"Statistics time {stat_time}")
