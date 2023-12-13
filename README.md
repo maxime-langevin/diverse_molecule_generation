@@ -7,13 +7,13 @@ pip install -r requirements.txt
 ```
 
 ```bash
-python run.py --nruns 5 --dataset CHEMBL3888429
+python run.py --nruns 10 --dataset drd2
 ```
 
 ```bash
-python run.py --nruns 5 --dataset CHEMBL1909203
+python run.py --nruns 10 --dataset egfr
 ```
 
 ```bash
-python run.py --nruns 5 --dataset CHEMBL3888429 --use_memory_rl True
+python run.py --nruns 10 --dataset drd2 --use_memory_rl True
 ```
