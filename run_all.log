@@ -1,0 +1,13 @@
+nohup: ignoring input
+Traceback (most recent call last):
+  File "/common/workdir/230925/diverse_molecule_generation/run.py", line 51, in <module>
+    generate(args.dataset, args.n_estimators, seed, optimizer, 
+  File "/common/workdir/230925/diverse_molecule_generation/generate.py", line 105, in generate
+    print('Optimization time ' + opt_time)
+TypeError: can only concatenate str (not "float") to str
+Traceback (most recent call last):
+  File "/common/workdir/230925/diverse_molecule_generation/run.py", line 51, in <module>
+    generate(args.dataset, args.n_estimators, seed, optimizer, 
+  File "/common/workdir/230925/diverse_molecule_generation/generate.py", line 105, in generate
+    print('Optimization time ' + opt_time)
+TypeError: can only concatenate str (not "float") to str
