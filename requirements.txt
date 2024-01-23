@@ -8,3 +8,4 @@ torch==1.11.0
 joblib==1.3.2
 python_Levenshtein==0.21.1
 scikit_learn==1.3.0
+seaborn==0.13.1
