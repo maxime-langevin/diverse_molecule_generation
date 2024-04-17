@@ -1,3 +1,3 @@
 [submodule "diverse_guacamol_baselines"]
 	path = diverse_guacamol_baselines
-	url = https://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@github.com/maxime-langevin/diverse_guacamol_baselines.git
+	url = https://github.com/maxime-langevin/diverse_guacamol_baselines.git
