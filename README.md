@@ -75,4 +75,4 @@ drd2_with_memory_RL.ipynb
 ```
 to reproduce Figure 13. 
 
-NB : Some cells are commented in `egfr.ipynb` and `drd2.ipynb` and the results of those cells already saved in `robustness_experiments` folder. Please uncomment them if you want to run them from scratch. 
+NB : Some cells are commented in `egfr.ipynb` and `drd2.ipynb` and the results of those cells already saved in the `robustness_experiments` folder, as they take a very long time to run. Please uncomment them if you want to run them and regenerate the results stored in `robustness_experiments` from scratch. 
