@@ -38,6 +38,9 @@ python run.py --nruns 10 --dataset egfr
 ```bash
 python run.py --nruns 10 --dataset drd2 --use_memory_rl True
 ```
+The EGFR and DRD2 datasets were extracted from the ExCAPE-DB database (Sun, J.; Jeliazkova, N.; Chupakhin, V.; Golib-Dzib, J.-F.; Engkvist, O.; Carlsson, L.;
+Wegner, J.; Ceulemans, H.; Georgiev, I.; Jeliazkov, V., et al. ExCAPE-DB: an integrated
+large scale dataset facilitating Big Data analysis in chemogenomics. J. Cheminf. 2017, 9, 1–9. 3.)
 
 NB : this step can be skipped, using already generated trajectories in the `results` and `results_memory_RL` folders. 
 
