@@ -31,7 +31,7 @@ from diverse_guacamol_baselines.smiles_lstm_hc.smiles_rnn_directed_generator imp
 opt_args = {}
 opt_args["lstm_hc"] = dict(
     pretrained_model_path="./diverse_guacamol_baselines/smiles_lstm_hc/pretrained_model/model_final_0.473.pt",
-    n_epochs=5,
+    n_epochs=151,
     mols_to_sample=4112,
     keep_top=128,
     optimize_n_epochs=1,
