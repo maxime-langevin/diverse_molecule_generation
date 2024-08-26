@@ -26,6 +26,7 @@ from rdkit.Chem import Descriptors, Mol, rdMolDescriptors
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors
 import pickle
+from itertools import combinations
 
 import math
 from collections import defaultdict
@@ -34,7 +35,24 @@ import os.path as op
 
 _fscores = None
 
+def jaccard_similarity(array1, array2):
+    intersection = np.sum(np.minimum(array1, array2))
+    union = np.sum(np.maximum(array1, array2))
+    return intersection / union if union != 0 else 1
 
+def compute_internal_jaccard_diversity(fps):
+    if len(fps) < 2:
+        return 1.0
+    
+    similarities = []
+    for fp1, fp2 in combinations(fps, 2):
+        similarity = jaccard_similarity(fp1, fp2)
+        similarities.append(similarity)
+    
+    avg_similarity = np.mean(similarities) if similarities else 0
+    diversity = 1 - avg_similarity
+    return diversity
+    
 def readFragmentScores(name='fpscores'):
     import gzip
     global _fscores
