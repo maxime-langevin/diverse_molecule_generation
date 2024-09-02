@@ -9,14 +9,17 @@ The following instructions will allow you to :
 * clone the repository
 * clone the submodules used by the repository
 * create a dedicated environment and install requirements
-  
+
+- Requirements : python 3.9  
 ```bash
 git clone https://github.com/maxime-langevin/diverse_molecule_generation.git
+cd diverse_molecule_generation
 git submodule update --init --recursive --remote
 conda create -c conda-forge -n diverse_molgen rdkit
 conda activate diverse_molgen
 pip install -r requirements.txt
 ```
+
 ## Reproducing results from the paper 
 
 
@@ -71,7 +74,7 @@ to reproduce Figure 6, 7b, 9b, 11d.
 ```bash
 compute_correlation_coefficient.ipynb
 ```
-to reproduce Figure 12. 
+to reproduce Figure 12. NB : This notebook uses private data. 
 
 ```bash
 drd2_with_memory_RL.ipynb
